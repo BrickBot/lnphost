@@ -1,0 +1,73 @@
+.TH lnpdump 1 "November 2004" "Stephan Höhrmann" "Lego Infrared Packet Monitor"
+.SH NAME
+lnpdump - Packet monitor for Lego infrared communication
+
+.SH SYNOPSIS
+.B lnpdump [ options ]
+
+.SH DESCRIPTION
+.B lnpdump
+is a packet monitor that decodes transmissions from Lego bricks that are
+equipped with an infrared transceiver. A lego tower must be connected to the
+PC for this program to work.
+
+.SH OPTIONS
+Below is a summary of the
+.B lnpdump
+options:
+.TP
+.B -a, --all
+Dump data of packets even if they are broken or cannot be interpreted.
+.TP
+.B -d DEVICE, --device=DEVICE
+Set the device the Lego tower is connected to. If this option is not present,
+the device name is taken from the RCXTTY environment variable or the built-in
+default value in the given order.
+.TP
+.B -f, --fast
+Set the transmission speed to 4800 baud instead of 2400 baud.
+.TP
+.B -h, --help
+Show this summary.
+.TP
+.B -m N, --mask N
+Set the host:port bit mask value used to decode LNP addressing layer messages.
+The default value is 0xf0 so that address 0x85 is decoded as 0x08:0x05 (host
+8, port 5).
+.TP
+.B -p, --noparity
+Turn on legOS compatibility mode. BrickOS/legOS Versions before 0.2.5.2 used a
+slightly different serial protocol (no parity bit instead of odd parity).
+.TP
+.B -r, --raw (implies --all)
+Dump all received data, including keepalive bytes and broken packets. However,
+bytes that form a valid package are still displayd as a block.
+
+.SH NOTES
+This program is based on the lnphost library and should work on any posix
+compilant operating system. USB support is currently only available under
+Linux.
+
+
+.SH AUTHOR
+Stephan Höhrmann <stephan@hoehrmann.de>
+
+.SH COPYRIGHT
+Copyright (C) 2004 Stephan Höhrmann.
+.P
+lnpdump is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+.P
+lnpdump is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+.P
+You should have received a copy of the GNU General Public License along with
+lnpdump; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA 02111-1307 USA
+.P
+This is free software, released under the terms of the GNU General Public
+License.
+
