@@ -43,6 +43,11 @@ struct ringbuf {
   unsigned char data[RINGBUFSIZE];
 };
 
+// Bitmask the tty types
+typedef enum {  tty_t_serial = 1,
+                tty_t_usb = 2,
+                tty_t_tcp = 4 } tty_type_t;
+
 typedef void (*lnp_raw_handler_t) (unsigned char *data, unsigned length,
 				int isvalid);
 typedef void (*lnp_lego_handler_t) (unsigned char *data, unsigned length);
@@ -55,7 +60,8 @@ typedef void (*lnp_addressing_handler_t) (unsigned char *data,
 
 struct lnptower {
   FILEHANDLE fd;
-  int usb,keepalive;
+  tty_type_t tty_type;
+  int keepalive;
   unsigned timeout;
   volatile int keepalivetimer;
   volatile int threadsactive;

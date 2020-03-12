@@ -13,8 +13,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <getopt.h>
 #include "lnphost.h"
+
+
+#if defined(_WIN32) & ( (! defined(__CYGWIN__)) | defined(__MINGW32__) )
+  #define usleep(t)    Sleep((t) / 1000)
+#endif // Windows
+
 
 
 /* ---- IR callback routines -------------------------------------------- */
@@ -154,7 +161,9 @@ int main(int argc, char *argv[]) {
   }
 
   /* ---- Program never terminates -------------------------------------- */
-  while (1) ;
+  while (1){
+    usleep(1000);
+  }
   lnp_close(&tower);
   return(EXIT_SUCCESS);
 }

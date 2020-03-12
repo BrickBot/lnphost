@@ -247,7 +247,7 @@ int lnp_raw_recvchar(struct lnptower *tower)
   COMMTIMEOUTS CommTimeouts;
   DWORD res=0;
   
-  if (tower->usb) {
+  if (tty_t_usb == tower->tty_type) {
     gettimeofday(&timebegin,0);
     while (1) {
       if (ReadFile(tower->fd,&data,1,&res,NULL)==0) {
@@ -461,7 +461,7 @@ int lnp_open(struct lnptower *tower, char *device, unsigned flags)
     return(-1);
   }
   if (GetCommState(tower->fd,&dcb)) {
-    tower->usb=0;
+    tower->tty_type=tty_t_serial;
     FillMemory(&dcb,sizeof(dcb),0);
     dcb.fBinary=TRUE;
     dcb.ByteSize=8;
@@ -479,7 +479,7 @@ int lnp_open(struct lnptower *tower, char *device, unsigned flags)
     PurgeComm(tower->fd,PURGE_RXABORT|PURGE_TXABORT|
 	      PURGE_RXCLEAR|PURGE_TXCLEAR);
   } else {
-    tower->usb=1;
+    tower->tty_type=tty_t_usb;
   }
 #else
   if ((tower->fd=open(device,O_RDWR))<0) {
@@ -487,7 +487,7 @@ int lnp_open(struct lnptower *tower, char *device, unsigned flags)
     return(-1);
   }
   if (isatty(tower->fd)) {
-    tower->usb=0;
+    tower->tty_type=tty_t_serial;
     memset(&ios,0,sizeof(ios));
     ios.c_cflag=CREAD|CLOCAL|CS8;
     if ((flags & LNP_FAST)==0) {
@@ -505,11 +505,11 @@ int lnp_open(struct lnptower *tower, char *device, unsigned flags)
     }
     tcflush(tower->fd,TCIOFLUSH);
   } else {
-    tower->usb=1;
+    tower->tty_type=tty_t_usb;
   }
 #endif
   /* Set up variables for the threads before they start */
-  tower->keepalive=((flags & LNP_NOKEEPALIVE)==0)?(!(tower->usb)):0;
+  tower->keepalive=((flags & LNP_NOKEEPALIVE)==0)?(tty_t_serial == tower->tty_type):0;
   if ((flags&LNP_FAST)!=0)
     tower->timeout=34;
   else if ((flags&LNP_NOPARITY)!=0)
