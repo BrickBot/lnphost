@@ -1,3 +1,4 @@
+> [!IMPORTANT]
 > ## DEPRECATION NOTICE:
 > The project [brickOS-bibo](https://github.com/BrickBot/BrickOS-Bibo) now includes the program ir-server, which not only should provide the functionality of both [lnpd](https://github.com/BrickBot/lnpd/) and this project but also further extends capabilities.
 > 
